@@ -16,7 +16,7 @@ func NewInvoicePlainText(report *InvoiceReport) *InvoicePlainText {
 	}
 }
 
-func (this InvoicePlainText) render() string {
+func (this InvoicePlainText) Render() string {
 	result := fmt.Sprintf("Statement for %v\n", this.report.CustomerName())
 
 	for _, amount := range this.report.AllAmount() {

@@ -8,8 +8,8 @@ import (
 	"os"
 
 	. "github.com/MikiWaraMiki/goexample/domain/model"
-	. "github.com/MikiWaraMiki/goexample/domain/presentation/plain_text"
 	. "github.com/MikiWaraMiki/goexample/domain/service"
+	. "github.com/MikiWaraMiki/goexample/presentation/plain_text"
 )
 
 func Statement(invoice Invoice, plays []Play) (*InvoiceReport, error) {
@@ -70,8 +70,9 @@ func main() {
 			panic("report generate failed")
 		}
 
-		render := NewInvoicePlainText(report)
+		plain_render := NewInvoicePlainText(report)
 
+		fmt.Println(plain_render.Render())
 	}
 	fmt.Println("exit")
 }
