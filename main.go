@@ -23,16 +23,17 @@ func AmountFor(performance *Performance, play *Play) int {
 	amount := NewAmount(play, performance)
 	return amount.Price()
 }
-func TotalAmount(performances []Performance, plays []Play) int {
-	result := 0
+func CalcTotalAmount(performances []Performance, plays []Play) int {
+	totalAmount := NewTotalAmount()
 	for _, performance := range performances {
 		play, err := Find(performance.PlayID, plays)
 		if err != nil {
 			continue
 		}
-		result += AmountFor(&performance, play)
+		amount := NewAmount(play, &performance)
+		totalAmount.AddAmount(amount)
 	}
-	return result
+	return totalAmount.Price()
 }
 
 func VolumeCreditsFor(performance Performance, play *Play) int {
@@ -73,7 +74,7 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 		}
 		result += fmt.Sprintf("%v: %v (%v seats)\n", play.Name, Usd(AmountFor(&performance, play)), performance.Audience)
 	}
-	totalAmount := TotalAmount(invoice.Performance, plays)
+	totalAmount := CalcTotalAmount(invoice.Performance, plays)
 	volumeCredits := TotalVolumeCredits(invoice.Performance, plays)
 
 	result += fmt.Sprintf("Amount owed is %v\n", Usd(totalAmount))
