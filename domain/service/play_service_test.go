@@ -15,11 +15,9 @@ func TestFetchByPlayIdWhenExist(t *testing.T) {
 		},
 	}
 
-	play_service := PlayService{
-		plays: plays,
-	}
+	play_service := NewPlayService(plays)
 
-	result, err := play_service.fetchByPlayId("test")
+	result, err := play_service.FetchByPlayId("test")
 
 	if err != nil {
 		t.Fatal("fetchByPlayId() is nil return")

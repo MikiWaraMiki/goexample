@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,16 +9,14 @@ import (
 	"os"
 
 	. "github.com/MikiWaraMiki/goexample/domain/model"
+	. "github.com/MikiWaraMiki/goexample/domain/service"
 	"github.com/dustin/go-humanize"
 )
 
 func Find(playId string, plays []Play) (*Play, error) {
-	for i := range plays {
-		if plays[i].PlayID == playId {
-			return &plays[i], nil
-		}
-	}
-	return nil, errors.New("not found")
+	play_service := NewPlayService(plays)
+
+	return play_service.FetchByPlayId(playId)
 }
 
 func AmountFor(performance *Performance, play *Play) int {
