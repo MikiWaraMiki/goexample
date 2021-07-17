@@ -10,6 +10,12 @@ type InvoiceCalcService struct {
 	play_service *PlayService
 }
 
+func NewInvoiceCalcService(play_service *PlayService) *InvoiceCalcService {
+	return &InvoiceCalcService{
+		play_service: play_service,
+	}
+}
+
 func (this InvoiceCalcService) GenerateInvoiceReport(invoice *Invoice) (*InvoiceReport, error) {
 	totalAmount := NewTotalAmount()
 	totalCredit := NewTotalCredit()

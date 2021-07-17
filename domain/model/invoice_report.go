@@ -13,3 +13,11 @@ func NewInvoiceReport(customer string, totalAmount *TotalAmount, totalCredit *To
 		totalCredit: totalCredit,
 	}
 }
+
+func (this InvoiceReport) TotalAmount() int {
+	return this.totalAmount.Price()
+}
+
+func (this InvoiceReport) TotalCredit() int {
+	return this.totalCredit.Volume()
+}
