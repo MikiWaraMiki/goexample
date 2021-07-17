@@ -5,3 +5,11 @@ type Play struct {
 	Name     string `json:"name"`
 	TypeName string `json:"typeName"`
 }
+
+func (this Play) IsTragedy() bool {
+	return this.TypeName == "tragedy"
+}
+
+func (this Play) IsComedy() bool {
+	return this.TypeName == "comedy"
+}

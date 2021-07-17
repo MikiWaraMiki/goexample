@@ -20,27 +20,8 @@ func Find(playId string, plays []Play) (*Play, error) {
 }
 
 func AmountFor(performance *Performance, play *Play) int {
-	thisAmount := 0
-
-	switch play.TypeName {
-	case "tragedy":
-		thisAmount = 40000
-		if performance.Audience > 30 {
-			addCost := 1000 * (performance.Audience - 30)
-			thisAmount += addCost
-		}
-	case "comedy":
-		thisAmount = 30000
-		if performance.Audience > 20 {
-			addCost := 10000 + 500*(performance.Audience-20)
-			thisAmount += addCost
-		}
-		thisAmount += 300 * performance.Audience
-	default:
-		thisAmount = 0
-	}
-
-	return thisAmount
+	amount := NewAmount(play, performance)
+	return amount.Price()
 }
 func TotalAmount(performances []Performance, plays []Play) int {
 	result := 0
