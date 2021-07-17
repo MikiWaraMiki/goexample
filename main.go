@@ -60,6 +60,17 @@ func AmountFor(performance *Performance, play *Play) int {
 
 	return thisAmount
 }
+func TotalAmount(performances []Performance, plays []Play) int {
+	result := 0
+	for _, performance := range performances {
+		play, err := Find(performance.PlayID, plays)
+		if err != nil {
+			continue
+		}
+		result += AmountFor(&performance, play)
+	}
+	return result
+}
 
 func VolumeCreditsFor(performance Performance, play *Play) int {
 	volumeCredits := int(math.Max(float64(performance.Audience-30), 0))
@@ -72,17 +83,16 @@ func VolumeCreditsFor(performance Performance, play *Play) int {
 }
 
 func TotalVolumeCredits(performances []Performance, plays []Play) int {
-	totalCredits := 0
+	result := 0
 	for _, performance := range performances {
 		play, err := Find(performance.PlayID, plays)
 		if err != nil {
-			totalCredits += 0
 			continue
 		}
-		totalCredits += VolumeCreditsFor(performance, play)
+		result += VolumeCreditsFor(performance, play)
 	}
 
-	return totalCredits
+	return result
 }
 
 func Usd(rawCost int) string {
@@ -91,8 +101,6 @@ func Usd(rawCost int) string {
 }
 
 func Statement(invoice Invoice, plays []Play) (string, error) {
-	totalAmount := 0
-
 	result := fmt.Sprintf("Statement for %v\n", invoice.Customer)
 
 	for _, performance := range invoice.Performance {
@@ -101,8 +109,8 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 			return "", err
 		}
 		result += fmt.Sprintf("%v: %v (%v seats)\n", play.Name, Usd(AmountFor(&performance, play)), performance.Audience)
-		totalAmount += AmountFor(&performance, play)
 	}
+	totalAmount := TotalAmount(invoice.Performance, plays)
 	volumeCredits := TotalVolumeCredits(invoice.Performance, plays)
 
 	result += fmt.Sprintf("Amount owed is %v\n", Usd(totalAmount))
