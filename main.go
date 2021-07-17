@@ -26,7 +26,7 @@ type Play struct {
 	TypeName string `json:"typeName"`
 }
 
-func find(playId string, plays []Play) (*Play, error) {
+func Find(playId string, plays []Play) (*Play, error) {
 	for i := range plays {
 		if plays[i].PlayID == playId {
 			return &plays[i], nil
@@ -35,37 +35,43 @@ func find(playId string, plays []Play) (*Play, error) {
 	return nil, errors.New("not found")
 }
 
-func statement(invoice Invoice, plays []Play) (string, error) {
+func AmountFor(performance *Performance, play *Play) int {
+	thisAmount := 0
+
+	switch play.TypeName {
+	case "tragedy":
+		thisAmount = 40000
+		if performance.Audience > 30 {
+			addCost := 1000 * (performance.Audience - 30)
+			thisAmount += addCost
+		}
+	case "comedy":
+		thisAmount = 30000
+		if performance.Audience > 20 {
+			addCost := 10000 + 500*(performance.Audience-20)
+			thisAmount += addCost
+		}
+		thisAmount += 300 * performance.Audience
+	default:
+		thisAmount = 0
+	}
+
+	return thisAmount
+}
+
+func Statement(invoice Invoice, plays []Play) (string, error) {
 	totalAmount := 0
 	volumeCredits := 0
 
 	result := fmt.Sprintf("Statement for %v\n", invoice.Customer)
 
 	for _, performance := range invoice.Performance {
-		thisAmount := 0
-		play, err := find(performance.PlayID, plays)
+		play, err := Find(performance.PlayID, plays)
 		if err != nil {
 			return "", err
 		}
 
-		switch play.TypeName {
-		case "tragedy":
-			thisAmount = 40000
-			if performance.Audience > 30 {
-				addCost := 1000 * (performance.Audience - 30)
-				thisAmount += addCost
-			}
-		case "comedy":
-			thisAmount = 30000
-			if performance.Audience > 20 {
-				addCost := 10000 + 500*(performance.Audience-20)
-				thisAmount += addCost
-			}
-			thisAmount += 300 * performance.Audience
-		default:
-			thisAmount = 0
-		}
-
+		thisAmount := AmountFor(&performance, play)
 		volumeCredits += int(math.Max(float64(performance.Audience-30), 0))
 
 		if play.TypeName == "comedy" {
@@ -118,7 +124,7 @@ func main() {
 		os.Exit(0)
 	}
 	for _, invoice := range invoices {
-		result, err := statement(invoice, plays)
+		result, err := Statement(invoice, plays)
 		if err != nil {
 			log.Fatal(err)
 			panic("runtime error")
