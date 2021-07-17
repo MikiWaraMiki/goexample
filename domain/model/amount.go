@@ -1,18 +1,30 @@
 package domain_model
 
+import "fmt"
+
 type Amount struct {
-	price int
+	play     *Play
+	seat     int
+	price    int
+	currency *Currency
 }
 
-func NewAmount(play *Play, performance *Performance) *Amount {
+func NewAmount(play *Play, performance *Performance, currency *Currency) *Amount {
 	price := calcAmount(play, performance)
 	return &Amount{
-		price: price,
+		play:     play,
+		seat:     performance.Audience,
+		price:    price,
+		currency: currency,
 	}
 }
 
 func (this Amount) Price() int {
 	return this.price
+}
+
+func (this Amount) PlainText() string {
+	return fmt.Sprintf("%v: %v (%v seats)\n", this.play.Name, this.currency.GetUsdStr(this.price), this.seat)
 }
 
 func calcAmount(play *Play, performance *Performance) int {

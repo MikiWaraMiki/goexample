@@ -27,7 +27,7 @@ func (this InvoiceCalcService) GenerateInvoiceReport(invoice *Invoice, currency 
 			return nil, errors.New("Invalid Play")
 		}
 
-		amount := NewAmount(play, &performance)
+		amount := NewAmount(play, &performance, currency)
 		totalAmount.AddAmount(amount)
 
 		credit := NewCredit(&performance, play)

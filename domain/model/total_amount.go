@@ -19,3 +19,12 @@ func (this TotalAmount) Price() int {
 	}
 	return price
 }
+
+func (this TotalAmount) Detail() string {
+	result := ""
+	for _, amount := range this.amounts {
+		result += amount.PlainText()
+	}
+
+	return result
+}
