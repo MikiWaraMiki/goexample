@@ -46,16 +46,17 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 		result += fmt.Sprintf("%v: %v (%v seats)\n", play.Name, Usd(AmountFor(&performance, play)), performance.Audience)
 	}
 
+	currency := NewUsd()
 	play_service := NewPlayService(plays)
 	calc_service := NewInvoiceCalcService(play_service)
 
-	report, err := calc_service.GenerateInvoiceReport(&invoice)
+	report, err := calc_service.GenerateInvoiceReport(&invoice, currency)
 
 	if err != nil {
 		return "", err
 	}
 
-	result += fmt.Sprintf("Amount owed is %v\n", Usd(report.TotalAmount()))
+	result += fmt.Sprintf("Amount owed is %v\n", report.TotalAmount())
 	result += fmt.Sprintf("You earned %v credits\n", report.TotalCredit())
 	return result, nil
 }

@@ -4,18 +4,21 @@ type InvoiceReport struct {
 	customer    string
 	totalAmount *TotalAmount
 	totalCredit *TotalCredit
+	currency    *Currency
 }
 
-func NewInvoiceReport(customer string, totalAmount *TotalAmount, totalCredit *TotalCredit) *InvoiceReport {
+func NewInvoiceReport(customer string, totalAmount *TotalAmount, totalCredit *TotalCredit, currency *Currency) *InvoiceReport {
 	return &InvoiceReport{
 		customer:    customer,
 		totalAmount: totalAmount,
 		totalCredit: totalCredit,
+		currency:    currency,
 	}
 }
 
-func (this InvoiceReport) TotalAmount() int {
-	return this.totalAmount.Price()
+func (this InvoiceReport) TotalAmount() string {
+	total := this.totalAmount.Price()
+	return this.currency.GetUsdStr(total)
 }
 
 func (this InvoiceReport) TotalCredit() int {

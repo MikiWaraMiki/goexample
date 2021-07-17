@@ -16,7 +16,7 @@ func NewInvoiceCalcService(play_service *PlayService) *InvoiceCalcService {
 	}
 }
 
-func (this InvoiceCalcService) GenerateInvoiceReport(invoice *Invoice) (*InvoiceReport, error) {
+func (this InvoiceCalcService) GenerateInvoiceReport(invoice *Invoice, currency *Currency) (*InvoiceReport, error) {
 	totalAmount := NewTotalAmount()
 	totalCredit := NewTotalCredit()
 
@@ -34,7 +34,7 @@ func (this InvoiceCalcService) GenerateInvoiceReport(invoice *Invoice) (*Invoice
 		totalCredit.AddCredit(credit)
 	}
 
-	invoice_report := NewInvoiceReport(invoice.Customer, totalAmount, totalCredit)
+	invoice_report := NewInvoiceReport(invoice.Customer, totalAmount, totalCredit, currency)
 
 	return invoice_report, nil
 }
