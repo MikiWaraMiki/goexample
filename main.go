@@ -8,6 +8,8 @@ import (
 	"log"
 	"math"
 	"os"
+
+	"github.com/dustin/go-humanize"
 )
 
 type Performance struct {
@@ -69,6 +71,10 @@ func VolumeCreditsFor(performance Performance, play *Play) int {
 	return volumeCredits
 }
 
+func DollarFormat(rawCost float64) string {
+	return fmt.Sprintf("$%v", humanize.Commaf(rawCost))
+}
+
 func Statement(invoice Invoice, plays []Play) (string, error) {
 	totalAmount := 0
 	volumeCredits := 0
@@ -81,13 +87,13 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 			return "", err
 		}
 		thisDollar := float64(AmountFor(&performance, play) / 100)
-		result += fmt.Sprintf("%v: $%.2f (%v seats)\n", play.Name, thisDollar, performance.Audience)
+		result += fmt.Sprintf("%v: %v (%v seats)\n", play.Name, DollarFormat(thisDollar), performance.Audience)
 		totalAmount += AmountFor(&performance, play)
 		volumeCredits += VolumeCreditsFor(performance, play)
 	}
 
 	totalDollar := float64(totalAmount / 100)
-	result += fmt.Sprintf("Amount owed is $%.2f\n", totalDollar)
+	result += fmt.Sprintf("Amount owed is %v\n", DollarFormat(totalDollar))
 	result += fmt.Sprintf("You earned %v credits\n", volumeCredits)
 	return result, nil
 }
