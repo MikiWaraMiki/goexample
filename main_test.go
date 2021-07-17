@@ -3,6 +3,8 @@ package main
 import (
 	"math"
 	"testing"
+
+	. "github.com/MikiWaraMiki/goexample/domain/model"
 )
 
 func TestAmountForByTragedyAudienceLessThan31(t *testing.T) {

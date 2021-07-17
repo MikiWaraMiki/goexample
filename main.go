@@ -9,24 +9,9 @@ import (
 	"math"
 	"os"
 
+	. "github.com/MikiWaraMiki/goexample/domain/model"
 	"github.com/dustin/go-humanize"
 )
-
-type Performance struct {
-	PlayID   string `json:"playID"`
-	Audience int    `json:"audience"`
-}
-
-type Invoice struct {
-	Customer    string        `json:"customer"`
-	Performance []Performance `json:"performances"`
-}
-
-type Play struct {
-	PlayID   string `json:"playID"`
-	Name     string `json:"name"`
-	TypeName string `json:"typeName"`
-}
 
 func Find(playId string, plays []Play) (*Play, error) {
 	for i := range plays {
