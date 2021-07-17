@@ -24,3 +24,7 @@ func (this InvoiceReport) TotalAmount() string {
 func (this InvoiceReport) TotalCredit() int {
 	return this.totalCredit.Volume()
 }
+
+func (this InvoiceReport) InvoiceDetail() string {
+	return this.totalAmount.Detail()
+}
