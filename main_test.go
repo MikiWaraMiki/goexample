@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"testing"
 )
 
@@ -99,5 +100,58 @@ func TestFindWhenNotIncludePlay(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Find()= %v, want nil", result)
+	}
+}
+
+// VolumeCreditsFor
+func TestVolumeCreditsForWhenAudienceLessThan30(t *testing.T) {
+	play := Play{
+		PlayID:   "test",
+		Name:     "test",
+		TypeName: "test",
+	}
+	performance := Performance{
+		PlayID:   "test",
+		Audience: 30,
+	}
+
+	expected := 0
+	if result := VolumeCreditsFor(performance, &play); result != expected {
+		t.Errorf("VolumeCreditsFor=%v, want %v", result, expected)
+	}
+}
+func TestVolumeCreditsForWhenAudienceOverThan30(t *testing.T) {
+	play := Play{
+		PlayID:   "test",
+		Name:     "test",
+		TypeName: "test",
+	}
+	performance := Performance{
+		PlayID:   "test",
+		Audience: 31,
+	}
+
+	expected := 1
+
+	if result := VolumeCreditsFor(performance, &play); result != expected {
+		t.Errorf("VolumeCreditsFor=%v, want %v", result, expected)
+	}
+}
+
+func TestVolumeCreditsWhenComedy(t *testing.T) {
+	play := Play{
+		PlayID:   "test",
+		Name:     "test",
+		TypeName: "comedy",
+	}
+	performance := Performance{
+		PlayID:   "test",
+		Audience: 31,
+	}
+
+	expected := 1 + int(math.Trunc(float64(performance.Audience)/5))
+
+	if result := VolumeCreditsFor(performance, &play); result != expected {
+		t.Errorf("VolumeCreditsFor=%v, want %v", result, expected)
 	}
 }

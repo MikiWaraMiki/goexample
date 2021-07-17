@@ -59,6 +59,16 @@ func AmountFor(performance *Performance, play *Play) int {
 	return thisAmount
 }
 
+func VolumeCreditsFor(performance Performance, play *Play) int {
+	volumeCredits := int(math.Max(float64(performance.Audience-30), 0))
+
+	if play.TypeName == "comedy" {
+		volumeCredits += int(math.Trunc(float64(performance.Audience) / 5))
+	}
+
+	return volumeCredits
+}
+
 func Statement(invoice Invoice, plays []Play) (string, error) {
 	totalAmount := 0
 	volumeCredits := 0
@@ -70,16 +80,10 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 		if err != nil {
 			return "", err
 		}
-
-		thisAmount := AmountFor(&performance, play)
-		volumeCredits += int(math.Max(float64(performance.Audience-30), 0))
-
-		if play.TypeName == "comedy" {
-			volumeCredits += int(math.Trunc(float64(performance.Audience) / 5))
-		}
-		thisDollar := float64(thisAmount / 100)
+		thisDollar := float64(AmountFor(&performance, play) / 100)
 		result += fmt.Sprintf("%v: $%.2f (%v seats)\n", play.Name, thisDollar, performance.Audience)
-		totalAmount += thisAmount
+		totalAmount += AmountFor(&performance, play)
+		volumeCredits += VolumeCreditsFor(performance, play)
 	}
 
 	totalDollar := float64(totalAmount / 100)
