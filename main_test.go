@@ -71,3 +71,33 @@ func TestAmountForByComedyAudienceOverThan20(t *testing.T) {
 		t.Errorf("AmountFor() = %v, want %v", result, expected)
 	}
 }
+
+// Find
+func TestFindWhenIncludePlay(t *testing.T) {
+	plays := []Play{
+		{
+			PlayID:   "test",
+			Name:     "test",
+			TypeName: "test",
+		},
+	}
+	result, _ := Find("test", plays)
+
+	if result == nil {
+		t.Errorf("Find() = nil, want play object")
+	}
+}
+func TestFindWhenNotIncludePlay(t *testing.T) {
+	plays := []Play{
+		{
+			PlayID:   "test",
+			Name:     "test",
+			TypeName: "test",
+		},
+	}
+	result, err := Find("notfound", plays)
+
+	if err == nil {
+		t.Errorf("Find()= %v, want nil", result)
+	}
+}
