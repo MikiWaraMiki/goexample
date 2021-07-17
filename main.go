@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math"
 	"os"
 
 	. "github.com/MikiWaraMiki/goexample/domain/model"
@@ -37,13 +36,9 @@ func CalcTotalAmount(performances []Performance, plays []Play) int {
 }
 
 func VolumeCreditsFor(performance Performance, play *Play) int {
-	volumeCredits := int(math.Max(float64(performance.Audience-30), 0))
+	credit := NewCredit(&performance, play)
 
-	if play.TypeName == "comedy" {
-		volumeCredits += int(math.Trunc(float64(performance.Audience) / 5))
-	}
-
-	return volumeCredits
+	return credit.Volume()
 }
 
 func TotalVolumeCredits(performances []Performance, plays []Play) int {
