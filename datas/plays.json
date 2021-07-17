@@ -1,14 +1,17 @@
-{
-  "hamlet": {
+[
+  {
+    "playID": "hamlet",
     "name": "Hamlet",
     "typeName": "tragedy"
   },
-  "as-like": {
+  {
+    "playID": "as-like",
     "name": "As You Like It",
     "typeName": "comedy"
   },
-  "othello": {
+  {
+    "playID": "othello",
     "name": "Othello",
     "typeName": "tragedy"
   }
-}
+]
