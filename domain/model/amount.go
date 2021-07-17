@@ -23,6 +23,18 @@ func (this Amount) Price() int {
 	return this.price
 }
 
+func (this Amount) FormattedPrice() string {
+	return this.currency.GetUsdStr(this.price)
+}
+
+func (this Amount) Seat() int {
+	return this.seat
+}
+
+func (this Amount) PlayName() string {
+	return this.play.Name
+}
+
 func (this Amount) PlainText() string {
 	return fmt.Sprintf("%v: %v (%v seats)\n", this.play.Name, this.currency.GetUsdStr(this.price), this.seat)
 }
