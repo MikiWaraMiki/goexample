@@ -33,6 +33,6 @@ func (this InvoiceReport) InvoiceDetail() string {
 	return this.totalAmount.Detail()
 }
 
-func (this InvoiceReport) AllAmount() []Amount {
+func (this InvoiceReport) AllAmount() []*Amount {
 	return this.totalAmount.AllAmount()
 }

@@ -40,10 +40,6 @@ func main() {
 		panic("json convert error")
 	}
 
-	for _, play := range plays {
-		fmt.Printf("%v", play.PlayID)
-	}
-
 	jsonInvoices, err := ioutil.ReadFile("./datas/invoices.json")
 	if err != nil {
 		log.Fatal(err)
