@@ -36,12 +36,14 @@ func TestCalcTotalSuccess(t *testing.T) {
 
 	play_service := NewPlayService(plays)
 
-	calc_service := NewTotalAmountCalcService(play_service)
+	calc_service := InvoiceCalcService{
+		play_service: play_service,
+	}
 
-	_, err := calc_service.CalcTotal(&invoice)
+	_, err := calc_service.GenerateInvoiceReport(&invoice)
 
 	if err != nil {
-		t.Errorf("CalcTotal() return error")
+		t.Errorf("GenerateInvoiceReport() expected return InvoiceReport But return error")
 	}
 }
 
@@ -75,11 +77,13 @@ func Test_CalcTotal_Failed_When_PlayID_Is_Invalid(t *testing.T) {
 
 	play_service := NewPlayService(plays)
 
-	calc_service := NewTotalAmountCalcService(play_service)
+	calc_service := InvoiceCalcService{
+		play_service: play_service,
+	}
 
-	_, err := calc_service.CalcTotal(&invoice)
+	_, err := calc_service.GenerateInvoiceReport(&invoice)
 
 	if err == nil {
-		t.Errorf("CalcTotal() expected return error. but nil")
+		t.Errorf("GenerateInvoiceReport() expected return error. but nil")
 	}
 }
