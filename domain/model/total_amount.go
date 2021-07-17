@@ -1,15 +1,17 @@
 package domain_model
 
 type TotalAmount struct {
-	amounts []Amount
+	amounts []*Amount
 }
 
 func NewTotalAmount() *TotalAmount {
-	return &TotalAmount{}
+	return &TotalAmount{
+		amounts: make([]*Amount, 0),
+	}
 }
 
-func (this TotalAmount) AddAmount(amount *Amount) {
-	this.amounts = append(this.amounts)
+func (this *TotalAmount) AddAmount(amount *Amount) {
+	this.amounts = append(this.amounts, amount)
 }
 
 func (this TotalAmount) Price() int {
@@ -29,6 +31,6 @@ func (this TotalAmount) Detail() string {
 	return result
 }
 
-func (this TotalAmount) AllAmount() []Amount {
+func (this TotalAmount) AllAmount() []*Amount {
 	return this.amounts
 }
