@@ -28,3 +28,7 @@ func (this TotalAmount) Detail() string {
 
 	return result
 }
+
+func (this TotalAmount) AllAmount() []Amount {
+	return this.amounts
+}

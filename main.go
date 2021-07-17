@@ -8,11 +8,11 @@ import (
 	"os"
 
 	. "github.com/MikiWaraMiki/goexample/domain/model"
+	. "github.com/MikiWaraMiki/goexample/domain/presentation/plain_text"
 	. "github.com/MikiWaraMiki/goexample/domain/service"
 )
 
-func Statement(invoice Invoice, plays []Play) (string, error) {
-	result := fmt.Sprintf("Statement for %v\n", invoice.Customer)
+func Statement(invoice Invoice, plays []Play) (*InvoiceReport, error) {
 
 	currency := NewUsd()
 	play_service := NewPlayService(plays)
@@ -21,12 +21,9 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 	report, err := calc_service.GenerateInvoiceReport(&invoice, currency)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	result += report.InvoiceDetail()
-	result += fmt.Sprintf("Amount owed is %v\n", report.TotalAmount())
-	result += fmt.Sprintf("You earned %v credits\n", report.TotalCredit())
-	return result, nil
+	return report, nil
 }
 
 func main() {
@@ -64,13 +61,17 @@ func main() {
 		fmt.Println("Nothing data")
 		os.Exit(0)
 	}
+
 	for _, invoice := range invoices {
-		result, err := Statement(invoice, plays)
+		report, err := Statement(invoice, plays)
+
 		if err != nil {
 			log.Fatal(err)
-			panic("runtime error")
+			panic("report generate failed")
 		}
-		fmt.Print(result)
+
+		render := NewInvoicePlainText(report)
+
 	}
 	fmt.Println("exit")
 }

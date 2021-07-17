@@ -16,6 +16,10 @@ func NewInvoiceReport(customer string, totalAmount *TotalAmount, totalCredit *To
 	}
 }
 
+func (this InvoiceReport) CustomerName() string {
+	return this.customer
+}
+
 func (this InvoiceReport) TotalAmount() string {
 	total := this.totalAmount.Price()
 	return this.currency.GetUsdStr(total)
@@ -27,4 +31,8 @@ func (this InvoiceReport) TotalCredit() int {
 
 func (this InvoiceReport) InvoiceDetail() string {
 	return this.totalAmount.Detail()
+}
+
+func (this InvoiceReport) AllAmount() []Amount {
+	return this.totalAmount.AllAmount()
 }
