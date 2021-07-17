@@ -71,8 +71,9 @@ func VolumeCreditsFor(performance Performance, play *Play) int {
 	return volumeCredits
 }
 
-func Usd(rawCost float64) string {
-	return fmt.Sprintf("$%v", humanize.Commaf(rawCost))
+func Usd(rawCost int) string {
+	dollar := float64(rawCost / 100)
+	return fmt.Sprintf("$%v", humanize.Commaf(dollar))
 }
 
 func Statement(invoice Invoice, plays []Play) (string, error) {
@@ -86,14 +87,13 @@ func Statement(invoice Invoice, plays []Play) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		thisDollar := float64(AmountFor(&performance, play) / 100)
-		result += fmt.Sprintf("%v: %v (%v seats)\n", play.Name, Usd(thisDollar), performance.Audience)
+		amount := AmountFor(&performance, play)
+		result += fmt.Sprintf("%v: %v (%v seats)\n", play.Name, Usd(amount), performance.Audience)
 		totalAmount += AmountFor(&performance, play)
 		volumeCredits += VolumeCreditsFor(performance, play)
 	}
 
-	totalDollar := float64(totalAmount / 100)
-	result += fmt.Sprintf("Amount owed is %v\n", Usd(totalDollar))
+	result += fmt.Sprintf("Amount owed is %v\n", Usd(totalAmount))
 	result += fmt.Sprintf("You earned %v credits\n", volumeCredits)
 	return result, nil
 }
