@@ -9,6 +9,7 @@ import (
 
 	. "github.com/MikiWaraMiki/goexample/domain/model"
 	. "github.com/MikiWaraMiki/goexample/domain/service"
+	. "github.com/MikiWaraMiki/goexample/presentation/html"
 	. "github.com/MikiWaraMiki/goexample/presentation/plain_text"
 )
 
@@ -67,8 +68,11 @@ func main() {
 		}
 
 		plain_render := NewInvoicePlainText(report)
+		html_render := NewInvoiceHtml(report)
 
 		fmt.Println(plain_render.Render())
+		// HTML
+		fmt.Println(html_render.Render())
 	}
 	fmt.Println("exit")
 }
